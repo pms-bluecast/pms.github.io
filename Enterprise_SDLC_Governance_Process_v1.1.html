@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise SDLC Framework | Critical Product Development | v1.1</title>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #0f2b44;
+            --secondary: #2c5f8a;
+            --accent: #d4a11e;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --warning: #f57c00;
+            --info: #0288d1;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-700: #334155;
+            --gray-900: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path fill="white" d="M50,10 L60,40 L90,40 L65,60 L75,90 L50,70 L25,90 L35,60 L10,40 L40,40 Z"/></svg>') repeat;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .header .version {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            background: #c62828;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            position: relative;
+        }
+
+        .toc {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid var(--gray-200);
+        }
+
+        .toc h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            padding: 0.25rem 0;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--gray-200);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            color: var(--primary);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem 0;
+            color: var(--secondary);
+        }
+
+        .card h4 {
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--gray-200);
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .data-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+
+        .rasci-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .rasci-table th,
+        .rasci-table td {
+            border: 1px solid var(--gray-300);
+            padding: 0.5rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .rasci-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .rasci-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            background: var(--gray-100);
+        }
+
+        .rasci-R { background: #dbeafe; color: #1e40af; font-weight: 600; }
+        .rasci-A { background: #fef3c7; color: #92400e; font-weight: 600; }
+        .rasci-S { background: #d1fae5; color: #065f46; }
+        .rasci-C { background: #ede9fe; color: #5b21b6; }
+        .rasci-I { background: #fce7f3; color: #9d174d; }
+
+        .template-container {
+            background: var(--gray-50);
+            border: 2px dashed var(--secondary);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .template-title {
+            background: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-top: -2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .etvx-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            overflow-x: auto;
+            display: block;
+            font-size: 0.8rem;
+        }
+
+        .etvx-table th,
+        .etvx-table td {
+            border: 1px solid var(--gray-300);
+            padding: 0.5rem;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .etvx-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .checklist-category {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .checklist-checkbox {
+            min-width: 1.5rem;
+            margin-right: 0.75rem;
+        }
+
+        .checklist-checkbox input {
+            width: 1.2rem;
+            height: 1.2rem;
+            cursor: pointer;
+        }
+
+        .checklist-content {
+            flex: 1;
+        }
+
+        .checklist-title {
+            font-weight: 500;
+        }
+
+        .checklist-desc {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            margin-top: 0.25rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .badge-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-docker {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-k8s {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-ai {
+            background: #fae8ff;
+            color: #a21caf;
+        }
+
+        .prohibited {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+
+        .template-url {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            font-size: 0.85rem;
+            border-radius: 0.5rem;
+        }
+
+        .code-block {
+            background: #1e1e2e;
+            color: #e2e2e2;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .code-block-yaml {
+            background: #0f172a;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--gray-100) 0%, white 100%);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-700);
+        }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .lesson-card {
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 3px solid var(--warning);
+        }
+
+        .lesson-title {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .lesson-remedy {
+            font-size: 0.85rem;
+            color: var(--success);
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .data-table,
+            .etvx-table {
+                font-size: 0.7rem;
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .toc,
+            .card {
+                break-inside: avoid;
+            }
+
+            .checklist-checkbox input {
+                display: none;
+            }
+        }
+		  /* Phase Cards */
+        .phase-card {
+            background: white;
+            border-radius: 0rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .phase-header {
+            background: #1b5a7a;
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .phase-number {
+            background: #ffc107;
+            color: #1a2a3a;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .phase-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .iso-badge {
+            background: #2e7d32;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Content Grid */
+        .phase-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .best-practices {
+            background: #f0fdf4;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .checklist-section {
+            background: #fefce8;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            border-left: 4px solid #eab308;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .best-practices .section-title { color: #166534; }
+        .checklist-section .section-title { color: #854d0e; }
+
+        .practice-list, .checklist-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .practice-list li, .checklist-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .practice-list li:last-child, .checklist-list li:last-child {
+            border-bottom: none;
+        }
+
+        .practice-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .checklist-list li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #eab308;
+            font-weight: bold;
+        }
+
+        .checklist-list input {
+            margin-right: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input {
+            margin-top: 0.2rem;
+        }
+
+        .checkbox-item span {
+            flex: 1;
+        }
+		      .warning-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .warning-box strong {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+<script>
+    // Save checkbox states to localStorage
+    document.querySelectorAll('.checkbox-item input').forEach((checkbox, index) => {
+        const saved = localStorage.getItem(`iso_sdlc_checklist_${index}`);
+        if (saved === 'true') checkbox.checked = true;
+        checkbox.addEventListener('change', () => {
+            localStorage.setItem(`iso_sdlc_checklist_${index}`, checkbox.checked);
+        });
+    });
+</script>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Enterprise Software Development Lifecycle <span class="tier-badge">🔴 CRITICAL PRODUCT</span></h1>
+        <p>Governance Framework | Full SDLC Process + Docker/K8s + AI Guidelines + Master Checklist</p>
+        <div class="version">Version 1.1 | Effective: 2026-06-08 | Owner: CTO Office</div>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+        <h2>📑 Table of Contents</h2>
+        <div class="toc-grid">
+            <a href="#introduction">1. Introduction</a>
+            <a href="#core-principles">2. Core Principles</a>
+            <a href="#roles">3. Roles & Responsibilities</a>
+            <a href="#phase1">4. Business & Domain Understanding</a>
+            <a href="#phase2">5. Requirement Engineering</a>
+            <a href="#phase3">6. High-Level Design (HLD)</a>
+            <a href="#phase4">7. Low-Level Design (LLD)</a>
+            <a href="#phase5">8. Coding Phase</a>
+            <a href="#phase6">9. Testing Phase (QA)</a>
+            <a href="#phase7">10. Performance Testing</a>
+            <a href="#phase8">11. Security Testing</a>
+            <a href="#phase9">12. Deployment Phase</a>
+            <a href="#phase10">13. Hypercare Support</a>
+            <a href="#phase11">14. Maintenance Phase</a>
+            <a href="#governance">15. Governance</a>
+            <a href="#tool-stack">16. Tool Stack</a>
+            <a href="#standards">17. Engineering Standards</a>
+            <a href="#security-checklist">18. Security Checklist</a>
+            <a href="#deployment-checklist">19. Deployment Readiness Checklist</a>
+            <a href="#ai-ml">20. AI/ML Governance</a>
+            <a href="#master-checklist">21. 🎯 MASTER PROJECT CHECKLIST</a>
+            <a href="#etvx-template">22. 📋 ETVX Template</a>
+            <a href="#testcases-template">23. 🧪 Test Cases & Traceability Matrix Template</a>
+            <a href="#api-spec-template">24. 🔌 API Specification Template</a>
+            <a href="#templates-repo">25. Templates Repository</a>
+            <a href="#docker-k8s">26. 🐳 Docker & Kubernetes Deployment Best Practices</a>
+            <a href="#ai-guidelines">27. 🤖 AI Services Guidelines & Checklist</a>
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <div class="card" id="introduction">
+        <h2>1. Introduction</h2>
+        <p><strong>Purpose:</strong> This document defines the standard enterprise software delivery process for:</p>
+        <ul>
+            <li>Web applications, Mobile applications, APIs & Microservices, Enterprise platforms</li>
+            <li>AI/ML applications, SaaS products, Internal systems</li>
+        </ul>
+        <p><strong>Objectives:</strong> Predictable delivery, High-quality software, Reduced rework, Better scalability, Security compliance, Clear accountability, Faster releases, Better maintainability, Improved collaboration.</p>
+        <div class="prohibited" style="background: #fee2e2; margin-top: 1rem;">
+            <strong>🔴 TIER 1 REQUIREMENT:</strong> All phases are MANDATORY. No phase can be skipped without a signed waiver from CTO and Client.
+        </div>
+    </div>
+
+    <!-- Core Principles -->
+    <div class="card" id="core-principles">
+        <h2>2. Core Principles</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Clarity Before Coding</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Design Before Implementation</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Single Source of Truth</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Shift Left Quality</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Security by Design</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Scalability by Default</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Reusability First</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Automation First</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Observability Mandatory</span>
+            <span style="background: #fee2e2; padding: 0.25rem 0.75rem; border-radius: 2rem;">Controlled Change Management</span>
+        </div>
+        <p style="margin-top: 1rem;"><strong>Shift Left Quality Approach:</strong> Testing and quality assurance activities are moved to the earliest possible stages — catching issues during requirements and design phases rather than reacting to bugs late in production.</p>
+    </div>
+
+    <!-- Roles & Responsibilities -->
+    <div class="card" id="roles">
+        <h2>3. Roles & Responsibilities</h2>
+        <table class="data-table">
+            <thead>
+                <tr><th>Role</th><th>Key Responsibilities</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="badge badge-critical">Client/Business Stakeholder</td><td>Business goals & approvals</td></tr>
+                <tr><td class="badge badge-critical">Product Owner</td><td>Requirement ownership, backlog prioritization</td></tr>
+                <tr><td class="badge badge-critical">Business Analyst</td><td>Requirement analysis & documentation (BRD, SRS)</td></tr>
+                <tr><td class="badge badge-critical">Solution Architect</td><td>Architecture decisions (HLD), technical feasibility</td></tr>
+                <tr><td class="badge badge-critical">Technical Lead</td><td>Technical governance, LLD oversight, peer reviews</td></tr>
+                <tr><td class="badge badge-critical">UI/UX Team</td><td>User experience design, prototypes, design system</td></tr>
+                <tr><td class="badge badge-critical">Backend/Frontend/Mobile Teams</td><td>Implementation per specifications</td></tr>
+                <tr><td class="badge badge-critical">QA Team</td><td>Validation, quality, automation, shift-left testing</td></tr>
+                <tr><td class="badge badge-critical">DevOps Team</td><td>Infrastructure, CI/CD, Docker/K8s deployment, monitoring</td></tr>
+                <tr><td class="badge badge-critical">Security Team</td><td>Security validation, SAST/DAST, VAPT</td></tr>
+                <tr><td class="badge badge-critical">Project Manager</td><td>Planning, coordination, stakeholder communication</td></tr>
+                <tr><td class="badge badge-critical">AI/ML Team</td><td>Model development, versioning, bias validation, prompt management</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PHASE 1: Business & Domain Understanding -->
+    <div class="card" id="phase1">
+        <h2>4. Business & Domain Understanding</h2>
+        <p><strong>Objective:</strong> Understand the client business, workflows, domain terminology, and operational challenges vis-a-vis the client's requirement to engage with the client in a meaningful way.</p>
+        <h3>RASCI Model</h3>
+        <table class="rasci-table">
+            <thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+            <tbody><tr><td class="rasci-R">Product Owner</td><td class="rasci-A">Product Owner</td><td class="rasci-S">-</td><td class="rasci-C">Client</td><td class="rasci-I">Delivery Head</td></tr></tbody>
+        </table>
+        <h3>Activities:</h3>
+        <ul><li>Understand the industry domain and make sense of the client requirements</li><li>Study existing systems and business workflows & identify operational pain points</li><li>Understand user hierarchy, regulatory/compliance needs, business KPIs</li><li>Review Industry Standards, competitor analysis and apply lateral thinking</li></ul>
+        <h3>Outcome:</h3>
+        <p>Updated BRD Document, incorporating clarifications from the client.</p>
+		<p></p>
+		    <!-- PHASE 1: Business & Domain Understanding -->
+    <div class="phase-card" id="phase1">
+ 
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Conduct stakeholder identification and analysis before any requirement gathering</li>
+                    <li>Create a domain glossary of business terms approved by client</li>
+                    <li>Perform competitor analysis and benchmark against industry standards</li>
+                    <li>Document regulatory and compliance requirements (GDPR, HIPAA, PCI-DSS, SOC2)</li>
+                    <li>Establish business KPIs and success metrics before technical discussions</li>
+                    <li>Create user journey maps for all identified user personas</li>
+                    <li>Document "As-Is" vs "To-Be" process flows</li>
+                    <li>Identify critical success factors (CSF) and key performance indicators (KPI)</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>BRD shared with all TLs at least 2 days before workshop</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Requirements workshop conducted with all teams (FE, BE, QA, DevOps)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All doubts and assumptions clarified and documented in BRD</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Updated BRD shared with team and approved by client</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Domain keywords documented and verified by Product Owner</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>User hierarchy and personas identified</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Regulatory/compliance needs documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Business KPIs defined and approved</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Industry standards and competitor analysis completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All communications confirmed in writing (email/MoM)</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+        <div class="template-url">📄 Template: BRD_template.docx</div>
+    </div>
+
+    <!-- PHASE 2: Requirement Engineering -->
+    <div class="card" id="phase2">
+        <h2>5. Requirement Engineering</h2>
+        <p><strong>Objective:</strong> Convert business expectations into structured, testable, and measurable requirements.</p>
+        <h3>RASCI Model</h3>
+        <table class="rasci-table">
+            <thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+            <tbody><tr><td class="rasci-R">PM</td><td class="rasci-A">Product Owner</td><td class="rasci-S">Team</td><td class="rasci-C">Client</td><td class="rasci-I">Delivery Head</td></tr></tbody>
+        </table>
+        <h3>Mandatory Validation Areas:</h3>
+        <ul><li>Functional, Validation, Boundary, Dependency, Negative, Security, Data Integrity</li></ul>
+        <h3>SRS Mandatory Sections:</h3>
+        <ul><li>Scope, Functional requirements, Non-functional requirements, User flows, Validations, Business rules, Assumptions, Constraints, Integration details, Reporting requirements</li></ul>
+        <h3>Outcome:</h3>
+        <p>Approved SRS Document (Scope of Work), Draft UAT Test Cases, Traceability Matrix Version 1, Requirements Checklist.</p>
+		<p></p>
+		    <!-- PHASE 2: Requirements Engineering -->
+    <div class="phase-card" id="phase2">
+  
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Use SMART criteria for requirements (Specific, Measurable, Achievable, Relevant, Time-bound)</li>
+                    <li>Apply MoSCoW prioritization (Must-have, Should-have, Could-have, Won't-have)</li>
+                    <li>Create User Stories with Acceptance Criteria (Given-When-Then format)</li>
+                    <li>Maintain bidirectional traceability matrix (BRD ↔ SRS ↔ Test Cases)</li>
+                    <li>Perform impact analysis for every requirement change</li>
+                    <li>Include Non-Functional Requirements (NFRs) in SRS</li>
+                    <li>Validate requirements with prototypes or wireframes</li>
+                    <li>Apply INVEST principle (Independent, Negotiable, Valuable, Estimable, Small, Testable)</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>SRS created conforming to BRD</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>SRS reviewed by all TLs and signed off by client</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All functional, non-functional, and security requirements documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>UAT test cases created from SRS</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Traceability Matrix V1 created (BRD → SRS)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Happy path, alternate, error, retry, timeout flows documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Data flow and dependencies identified</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>User & Access Governance defined (RBAC)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Mandatory validation areas covered (Functional, Boundary, Negative, Security, Data Integrity)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All assumptions documented and vetted by Product Owner</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+        <div class="template-url">📄 Template: SRS_template.docx</div>
+    </div>
+
+    <!-- PHASE 3: High-Level Design (HLD) -->
+    <div class="card" id="phase3">
+        <h2>6. High-Level Design (HLD)</h2>
+        <p><strong>Objective:</strong> Define how the system is structured and how different components interact.</p>
+        <h3>RASCI Model</h3>
+        <table class="rasci-table">
+            <thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+            <tbody><tr><td class="rasci-R">Solution Architect</td><td class="rasci-A">CTO</td><td class="rasci-S">Tech Team</td><td class="rasci-C">Client, Product Owner</td><td class="rasci-I">Client, Dev Team</td></tr></tbody>
+        </table>
+        <h3>System Architecture defines:</h3>
+        <ul><li>Service boundaries, API gateway, Auth mechanism, Event/Queue architecture, Caching strategy</li><li>Major components/services, Technology stack, Layer separation</li><li>NFRs: Performance, Scalability, Availability, Security, Disaster recovery</li></ul>
+        <h3>Outcomes:</h3>
+        <ul><li>Logical Architecture Diagram, Deployment Architecture Diagram</li></ul>
+		<p></p>
+		   <!-- PHASE 3: High-Level Design (HLD) -->
+    <div class="phase-card" id="phase3">
+   
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Apply C4 Model (Context, Container, Component, Code) for architecture diagrams</li>
+                    <li>Design for scalability using horizontal scaling patterns</li>
+                    <li>Implement API-first design with OpenAPI specification</li>
+                    <li>Use event-driven architecture for asynchronous processing</li>
+                    <li>Apply circuit breaker pattern for external dependencies</li>
+                    <li>Design for observability (metrics, logs, traces) from day one</li>
+                    <li>Implement infrastructure as code (IaC) for all environments</li>
+                    <li>Apply twelve-factor app methodology for cloud-native design</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>Infrastructure requirements estimated for all environments</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All functional requirements mapped to design</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All NFR requirements incorporated (performance, security, scalability)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Logical Architecture Diagram completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Deployment Architecture Diagram completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Technology stack finalized and approved</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>RBAC and access governance defined</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Risk & dependency analysis completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Design reviewed and approved by CTO/Architect</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Technical feasibility analysis (cost & time) completed</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+        <div class="template-url">📄 Template: HLD_template.docx</div>
+    </div>
+
+    <!-- PHASE 4: Low-Level Design (LLD) -->
+    <div class="card" id="phase4">
+        <h2>7. Low-Level Design (LLD)</h2>
+        <p><strong>Objective:</strong> Convert HLD into detailed, implementation-ready technical specifications to remove implementation ambiguity, define exact development behavior, standardize coding approach, reduce defects, improve maintainability, enable parallel development, and improve testing readiness.</p>
+
+        <h3>7.1 Database Detailed Design</h3>
+        <p><strong>Define:</strong> ER Diagrams, Tables, Columns, Data types, Constraints, Indexes, Relationships, Audit fields, Soft delete strategy, Partitioning, Sharding, Archiving, Query optimization</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">Tech Lead</td><td class="rasci-A">Solution Architect</td><td class="rasci-S">-</td><td class="rasci-C">CTO, Product Owner</td><td class="rasci-I">Client, Dev Team</td></tr></table>
+
+        <h3>7.2 Business Logic Definition (ETVX)</h3>
+        <p><strong>Define:</strong> Processing logic, Rules, Conditions, Decision flow, Calculations, Integrations, Validations, Error handling, Edge cases</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">Tech Team</td><td class="rasci-A">Tech Lead</td><td class="rasci-S">-</td><td class="rasci-C">CTO, Product Owner</td><td class="rasci-I">Client, Dev Team</td></td></table>
+
+        <h3>7.3 Sequence Diagrams</h3>
+        <p><strong>For:</strong> Login, Payments, Notifications, Order processing, External integrations</p>
+
+        <h3>7.4 UI/UX Design</h3>
+        <p><strong>Define:</strong> User Personas, Information Architecture, User Flows, Wireframes, Prototypes</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">UI/UX team</td><td class="rasci-A">CTO</td><td class="rasci-S">Dev Team, Architect</td><td class="rasci-C">Client</td><td class="rasci-I">Client, Dev Team, QC</td></tr></table>
+
+        <h3>7.5 API Design & Specification</h3>
+        <p><strong>Define:</strong> Endpoint, HTTP method, Request/Response schema, Headers, Status codes, Error responses, Pagination, Sorting, Filtering, Authentication</p>
+
+        <h3>7.6 UI Behavior Design</h3>
+        <p><strong>Define:</strong> Form behavior, Field dependency, Loading states, Empty states, Error states, Pagination, Filter persistence, State management</p>
+
+        <h3>7.7 Reusable Component Design</h3>
+        <p><strong>Identify:</strong> Shared components, Shared utilities, Common services, Common validators</p>
+
+        <h3>7.8 Security Design</h3>
+        <p><strong>Define:</strong> Authorization checks, Role validations, Input sanitization, Encryption, Token handling, Session management</p>
+
+        <h3>7.9 Performance Design</h3>
+        <p><strong>Deliverables:</strong> Query Optimization Plan, Caching Strategy, API Optimization Design, Async Processing Design, Frontend Performance Plan, Scalability Strategy, Queue Design, Monitoring Metrics Design</p>
+
+        <h3>7.10 Logging & Audit Design</h3>
+        <p><strong>Define:</strong> What to log, Log structure, Audit trails, Error logging, Security events</p>
+
+        <h3>7.11 State Management Design</h3>
+        <p><strong>Define:</strong> Data flow, State persistence, Cache handling, Synchronization</p>
+		
+		<p></p>
+		    <!-- PHASE 4: Low-Level Design (LLD) -->
+    <div class="phase-card" id="phase4">
+    
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Apply SOLID principles and design patterns consistently</li>
+                    <li>Use database normalization (3NF) with denormalization for performance where needed</li>
+                    <li>Implement ETVX (Entity-Transaction-Validation-eXception) for business logic</li>
+                    <li>Design for idempotency in all write operations</li>
+                    <li>Apply pessimistic/optimistic locking based on concurrency requirements</li>
+                    <li>Use structured logging with correlation IDs for distributed tracing</li>
+                    <li>Implement retry with exponential backoff for transient failures</li>
+                    <li>Design APIs with pagination, filtering, sorting, and field selection</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>ER Diagram and DB schema design completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Database optimization (indexes, partitioning, sharding) planned</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>ETVX document for business logic completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>API Specification (OpenAPI) completed and approved by all teams</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>UI/UX designs (wireframes, prototypes) approved</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Security design (encryption, token handling, session management) documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Performance design (caching, async, queue) documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Logging & audit specifications defined</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>State management design (frontend/mobile) completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Unit test scenarios and boundary conditions documented</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="template-url">📄 Master LLD Template: LLD_template.docx</div>
+    </div>
+
+    <!-- PHASE 5: Coding Phase -->
+    <div class="card" id="phase5">
+        <h2>8. Coding Phase</h2>
+        <p><strong>Pre-requisites:</strong> SRS, HLD Docs, LLD Docs, UAT Test Cases, Integration Test cases</p>
+        <p><strong>Deliverables:</strong> Source Code, Unit Test results, Integration Test results, Peer Review Sign off</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">Dev, UI team</td><td class="rasci-A">Tech Leads</td><td class="rasci-S">CTO</td><td class="rasci-C">Architect</td><td class="rasci-I">Client, QC</td></tr></table>
+    <p></p>
+	   <!-- PHASE 5: Coding & Implementation -->
+    <div class="phase-card" id="phase5">
+ 
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Apply Test-Driven Development (TDD) or Behavior-Driven Development (BDD)</li>
+                    <li>Use pre-commit hooks for linting, formatting, and secret detection</li>
+                    <li>Follow Conventional Commits specification for commit messages</li>
+                    <li>Implement peer review with mandatory approval before merge</li>
+                    <li>Maintain code coverage threshold (≥80%) for all modules</li>
+                    <li>Apply clean architecture and dependency injection</li>
+                    <li>Never hardcode secrets; use secret management always</li>
+                    <li>Implement health check endpoints for all services</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>Code planned and designed before coding (including unit test cases)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Functional requirements covered (ETVX, sequence diagrams, flowcharts)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Unit testing completed and documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Integration tests completed before deployment</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Smoke tests (UAT cases) passed before QA release</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All coding standards and naming conventions applied</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Date/time functions standardized (UTC) across project</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Dead code and console logs removed before QA release</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Peer review completed and signed off</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>No hardcoded secrets (all in Vault/Secrets Manager)</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+	
+	</div>
+
+    <!-- PHASE 6: Testing Phase -->
+    <div class="card" id="phase6">
+        <h2>9. Testing Phase (QA Team)</h2>
+        <p><strong>Activities:</strong> Automation Test scripting, Test Execution (Functional, UI/UX, Integration, Security, Performance)</p>
+        <p><strong>Outcome:</strong> Test Results, Defect Log, Traceability Matrix, Sign Off to Deploy in Staging</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">QA</td><td class="rasci-A">QA</td><td class="rasci-S">Dev team</td><td class="rasci-C">Architect, CTO</td><td class="rasci-I">Client</td><tr></table>
+        
+		
+<p></p>
+    <!-- PHASE 6: Testing & QA -->
+    <div class="phase-card" id="phase6">
+
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Apply test pyramid: Unit (70%) → Integration (20%) → E2E (10%)</li>
+                    <li>Implement shift-left testing (test early, test often)</li>
+                    <li>Use test data management with production-like anonymized data</li>
+                    <li>Automate regression test suite</li>
+                    <li>Perform exploratory testing for edge cases</li>
+                    <li>Maintain test coverage reports and quality gates</li>
+                    <li>Conduct pair testing for complex modules</li>
+                    <li>Implement API contract testing</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>UAT test cases created from SRS (shift-left)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Test data prepared (production-like volume)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All test types executed: Functional, UI/UX, Integration, Security, Performance</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Edge cases tested (empty input, negative, boundary, null)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All filter combinations tested</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Validation messages clear, specific, and actionable</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Timezone handling tested (UTC standard)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Traceability Matrix updated (Req ↔ Test Case ↔ Defect)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All critical/severe defects resolved and re-tested</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>QA Sign-off obtained for staging deployment</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+		<div class="template-url">📄 Template: UAT_template.docx</div>
+    </div>
+
+    <!-- PHASE 7 & 8: Performance & Security Testing -->
+    <div class="card" id="phase7">
+        <h2>10. Performance Testing</h2>
+        <p><strong>Activities:</strong> API latency validation, Load testing, Infrastructure health check</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">QA</td><td class="rasci-A">DevOps</td><td class="rasci-S">Dev team</td><td class="rasci-C">Architect, CTO</td><td class="rasci-I">Client</td></tr></table>
+        <!-- PHASE 7: Performance Testing -->
+    <div class="phase-card" id="phase7">
+    
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Test with production-like data volume and traffic patterns</li>
+                    <li>Establish baseline performance metrics before load testing</li>
+                    <li>Test for 2x-3x expected peak traffic</li>
+                    <li>Monitor resource utilization during tests (CPU, Memory, I/O, Network)</li>
+                    <li>Identify and optimize slow queries (N+1 problem)</li>
+                    <li>Test database connection pool limits</li>
+                    <li>Verify caching effectiveness (hit ratio)</li>
+                    <li>Test queue processing throughput and lag</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>API latency validated against SLA (p95, p99)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Load testing completed at 2x expected traffic</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Stress testing completed (breakpoint identified)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Soak testing completed for memory leak detection</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Scalability testing (horizontal scaling) validated</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Database query performance optimized (indexes added)</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Caching strategy effectiveness verified</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Queue processing latency within acceptable range</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Infrastructure auto-scaling configured and tested</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Performance test report delivered and approved</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+	</div>
+
+    <div class="card" id="phase8">
+        <h2>11. Security Testing</h2>
+        <p><strong>Activities:</strong> Vulnerability Assessment and Penetration Testing (OWASP Top 10), Document Control, Audit log verification, RBAC</p>
+        <p><strong>Deliverables:</strong> VAPT report</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">QA</td><td class="rasci-A">DevOps</td><td class="rasci-S">Dev team</td><td class="rasci-C">Architect, CTO</td><td class="rasci-I">Client</td></td></table>
+        <!-- PHASE 8: Security Testing -->
+    <div class="phase-card" id="phase8">
+ 
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Apply OWASP Top 10 as minimum security baseline</li>
+                    <li>Implement SAST in CI/CD pipeline (fail on critical findings)</li>
+                    <li>Perform DAST on staging environment before production</li>
+                    <li>Scan dependencies for known vulnerabilities (Snyk, Trivy)</li>
+                    <li>Conduct penetration testing for critical modules</li>
+                    <li>Validate all authentication and authorization controls</li>
+                    <li>Test for rate limiting and brute force protection</li>
+                    <li>Verify audit logs for all security events</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>SAST (Static Analysis) completed - no critical findings</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>DAST (Dynamic Analysis) completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Dependency scan completed - no critical CVEs</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Vulnerability Assessment & Penetration Testing (VAPT) completed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>RBAC validation completed for all roles</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Audit logging enabled and verified</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Secrets scan completed - no hardcoded secrets</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Input sanitization and encryption validated</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Rate limiting implemented on all API endpoints</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Security test report delivered and approved</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+	
+	</div>
+
+    <!-- PHASE 9: Deployment Phase -->
+    <div class="card" id="phase9">
+        <h2>12. Deployment Phase</h2>
+        <p><strong>Main Goals:</strong> Safe releases, Minimal downtime, Predictable deployments, Faster rollback, Stable environments, Traceability, Zero configuration drift</p>
+        <div class="prohibited">
+            <strong>🚫 NEVER Deploy Without:</strong> QA approval, Backup, Rollback plan, Monitoring, Security validation, Smoke testing<br>
+            <strong>🚫 NEVER Allow:</strong> Direct production code edits, Unapproved releases, Hardcoded secrets, Untested DB migrations
+        </div>
+        <h3>Major Deployment Activities:</h3>
+        <ul>
+            <li>Build Preparation, Code Freeze & Release Branching, CI/CD Pipeline Execution</li>
+            <li>Environment Preparation, Configuration Management (HashiCorp Vault)</li>
+            <li>Infrastructure Deployment (IaC: Terraform, Helm)</li>
+            <li>Database Migration Execution (backward compatible, rollback support)</li>
+            <li>Application Deployment (Rolling/Blue-Green/Canary)</li>
+            <li>Smoke Testing, Integration Validation, Monitoring Setup</li>
+            <li>Backup & Rollback Preparation, UAT/Staging Validation</li>
+            <li>Production Release Approval, Production Deployment</li>
+        </ul>
+        <table class="rasci-table"><thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">DevOps</td><td class="rasci-A">Tech leads</td><td class="rasci-S">Dev team</td><td class="rasci-C">QA, Architect, CTO</td><td class="rasci-I">Client</td></tr></table>
+        
+		<p></P>
+		    <!-- PHASE 9: Deployment -->
+    <div class="phase-card" id="phase9">
+
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Use Blue-Green or Canary deployment for zero-downtime releases</li>
+                    <li>Implement Infrastructure as Code (Terraform, Helm)</li>
+                    <li>Maintain immutable infrastructure (never patch running containers)</li>
+                    <li>Use feature flags for progressive rollout</li>
+                    <li>Automate rollback with one-click capability</li>
+                    <li>Validate all health checks before traffic shift</li>
+                    <li>Monitor deployment metrics in real-time</li>
+                    <li>Maintain deployment runbook with step-by-step instructions</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>QA Sign-off obtained for staging</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Security Sign-off obtained</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Performance Sign-off obtained</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Product Owner Sign-off for production</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Database backup completed before migration</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Rollback procedure tested and documented</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Smoke test scenarios prepared and executed</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Monitoring dashboards and alerts configured</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Release notes prepared and communicated</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Incident escalation plan active and on-call notified</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+		<div class="template-url">📄 Deployment Checklist: deployment_checklist.docx</div>
+    </div>
+
+    <!-- PHASE 10 & 11: Hypercare & Maintenance -->
+    <div class="card" id="phase10">
+        <h2>13. Hypercare / Post-Deployment Support</h2>
+        <p><strong>Activities:</strong> Monitor logs, alerts, incidents; Support users; Fix hot issues</p>
+        <table class="rasci-table"><thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead>
+		<tr><td class="rasci-R">Dev team</td><td class="rasci-A">DevOps</td><td class="rasci-S">Tech leads</td><td class="rasci-C">QA, Architect</td><td class="rasci-I">Client, CTO</td></tr></table>
+   <p></p>
+       <!-- PHASE 10: Hypercare & Maintenance -->
+    <div class="phase-card" id="phase10">
+   
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                    <li>Establish SLAs (Service Level Agreements) for incident response</li>
+                    <li>Maintain error budget for feature vs stability trade-offs</li>
+                    <li>Conduct blameless post-incident reviews (RCA)</li>
+                    <li>Implement SLO-based alerting (not just static thresholds)</li>
+                    <li>Track technical debt with interest calculation</li>
+                    <li>Automate dependency updates with security scanning</li>
+                    <li>Regular disaster recovery drills (quarterly)</li>
+                    <li>Maintain up-to-date runbooks and knowledge base</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                    <li class="checkbox-item"><input type="checkbox"> <span>24x7 monitoring active and dashboards green</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Incident severity classification defined</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Escalation matrix defined and communicated</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Runbooks documented for common scenarios</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>RCA completed for all SEV1/SEV2 incidents</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Technical debt tracked and prioritized</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Backup and DR drills scheduled</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Security patches applied within SLA</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>SLA compliance reports generated monthly</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Lessons learned sessions conducted after major incidents</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+   </div>
+
+    <div class="card" id="phase11">
+        <h2>14. Maintenance Phase</h2>
+        <p><strong>Types:</strong> Corrective (bug fixes), Adaptive (environment changes), Perfective (performance/UI), Preventive (security patching)</p>
+        <p><strong>KPIs:</strong> MTTR, Application Uptime, Incident Closure Rate, Defect Recurrence Rate, API Response Time</p>
+        <table class="rasci-table">
+		<thead><tr><th>Responsible</th><th>Accountable</th><th>Supportive</th><th>Consulted</th><th>Informed</th></tr></thead><tr><td class="rasci-R">Dev team</td><td class="rasci-A">DevOps</td><td class="rasci-S">Tech leads</td><td class="rasci-C">QA, Architect</td><td class="rasci-I">Client, CTO</td></tr></table>
+        <div class="template-url">📄 Incident RCA Template: incident_RCA_template.docx</div>
+    </div>
+
+    <!-- Governance -->
+    <div class="card" id="governance">
+        <h2>15. Governance</h2>
+        <h3>Definition of Done (DoD)</h3>
+        <ul><li>Requirement implemented</li><li>Code reviewed</li><li>Unit tested</li><li>Integration tested</li><li>Security validated</li><li>Performance validated</li><li>Documentation updated</li><li>QA approved</li><li>UAT approved</li></ul>
+        <h3>Engineering KPIs</h3>
+        <p><strong>Delivery KPIs:</strong> Sprint predictability, Release frequency, Defect leakage.<br>
+        <strong>Quality KPIs:</strong> Production bugs, Test coverage, MTTR.<br>
+        <strong>Performance KPIs:</strong> API latency, Uptime, Error rate.</p>
+        <div class="prohibited">
+            <strong>🚫 STRICTLY PROHIBITED:</strong>
+            <ul><li>Development without approved requirements</li><li>Direct production changes</li><li>Unreviewed code merges</li><li>Unapproved API changes</li><li>Hardcoded secrets</li><li>Missing audit logging</li><li>Missing testing</li></ul>
+        </div>
+    </div>
+
+    <!-- Tool Stack -->
+    <div class="card" id="tool-stack">
+        <h2>16. Recommended Enterprise Tool Stack</h2>
+        <table class="data-table">
+            <thead><tr><th>Category</th><th>Recommended Tools</th></tr></thead>
+            <tbody>
+                <tr><td>Requirement Management</td><td>Jira, Azure DevOps, Confluence, GitHub Issues</td> </tr>
+                <tr><td>Architecture & Diagramming</td><td>Draw.io, Lucidchart, Miro</td> </tr>
+                <tr><td>API Design</td><td>Swagger/OpenAPI, Postman</td> </tr>
+                <tr><td>Source Control</td><td>GitHub, GitLab, Bitbucket</td> </tr>
+                <tr><td>CI/CD</td><td>GitHub Actions, Jenkins, GitLab CI, ArgoCD</td> </tr>
+                <tr><td>Containerization</td><td>Docker, Kubernetes, Helm</td> </tr>
+                <tr><td>Infrastructure as Code</td><td>Terraform, Pulumi, Crossplane</td> </tr>
+                <tr><td>Security Scanning</td><td>Snyk, SonarQube, Trivy, OWASP Dependency Check</td> </tr>
+                <tr><td>Monitoring</td><td>Grafana, Prometheus, ELK Stack, Datadog, New Relic</td> </tr>
+                <tr><td>Testing Automation</td><td>Playwright, Cypress, Selenium, JMeter, Appium</td> </tr>
+                <tr><td>Secrets Management</td><td>HashiCorp Vault, AWS Secrets Manager, Doppler</td> </tr>
+                <tr><td>Cloud Platforms</td><td>AWS, Azure, GCP</td> </tr>
+                <tr><td>AI/ML Ops</td><td>MLflow, DVC, Weights & Biases, LangSmith</td> </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Engineering Standards -->
+    <div class="card" id="standards">
+        <h2>17. Enterprise Engineering Standards</h2>
+        <ul>
+            <li>All APIs must follow OpenAPI standards</li>
+            <li>All source code must follow organization coding standards</li>
+            <li>Every service must include structured logging</li>
+            <li>Every deployment must support rollback</li>
+            <li>Every application must include health check endpoints</li>
+            <li>All environments must be reproducible using IaC</li>
+            <li>Mandatory repository folders: docs/, src/, tests/, deployment/, scripts/, monitoring/</li>
+            <li>Branching Strategy: main, develop, release/*, hotfix/*</li>
+            <li>Commit Standards: Conventional commits</li>
+        </ul>
+    </div>
+
+    <!-- Security Checklist -->
+    <div class="card" id="security-checklist">
+        <h2>18. Security Checklist</h2>
+        <ul class="checklist" style="list-style: none; padding-left: 0;">
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Secrets stored in secret manager</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> No hardcoded credentials</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> RBAC validation completed</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Dependency scan completed</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> SAST & DAST completed</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Audit logging enabled</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Input sanitization verified</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Encryption validated</li>
+        </ul>
+    </div>
+
+    <!-- Deployment Readiness Checklist -->
+    <div class="card" id="deployment-checklist">
+        <h2>19. Deployment Readiness Checklist</h2>
+        <ul class="checklist" style="list-style: none; padding-left: 0;">
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> QA approval obtained</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Backup completed</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Rollback procedure tested</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Smoke test scenarios prepared</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Monitoring dashboards configured</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Alerting enabled</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Release notes prepared</li>
+            <li style="padding: 0.25rem 0; padding-left: 1.5rem; position: relative;"><span style="position: absolute; left: 0;">☐</span> Stakeholder approvals completed</li>
+        </ul>
+    </div>
+
+    <!-- AI/ML Governance -->
+    <div class="card" id="ai-ml">
+        <h2>20. AI/ML Governance (If Applicable)</h2>
+        <ul>
+            <li>Model versioning mandatory (DVC or MLflow)</li>
+            <li>Training dataset traceability required</li>
+            <li>Bias validation required for production models</li>
+            <li>Prompt/version management for GenAI systems</li>
+            <li>AI response monitoring and audit logging required</li>
+            <li>Human approval for critical AI decisions</li>
+        </ul>
+    </div>
+
+    <!-- ==================== MASTER PROJECT CHECKLIST (FULL) ==================== -->
+    <div class="card" id="master-checklist">
+        <h2>21. 🎯 MASTER PROJECT CHECKLIST</h2>
+        <p><em>Based on lessons learned from 150+ project issues and industry best practices. Each item must be verified before phase completion.</em></p>
+
+        <div class="stats">
+            <div class="stat-card"><span class="stat-number">145+</span><br>Checklist Items</div>
+            <div class="stat-card"><span class="stat-number">12</span><br>Categories</div>
+            <div class="stat-card"><span class="stat-number">100%</span><br>TIER 1 Mandatory</div>
+        </div>
+
+        <!-- Category 1: Pre-Development & Planning -->
+        <div class="checklist-category">📋 1. Pre-Development & Planning</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">All requirements clarified and signed off in writing before coding began</div><div class="checklist-desc">Every field, rule, and workflow confirmed with client. Written/email sign-off obtained.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Team studied and understood client's business domain before development</div><div class="checklist-desc">Domain knowledge acquired, business terms understood, workflows analyzed.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">DB design finalized and approved before development</div><div class="checklist-desc">ER diagrams, relationships, constraints reviewed. Schema approved by architect.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">API Spec created and agreed upon by FE, BE, and Mobile teams</div><div class="checklist-desc">All endpoints, request/response schemas, data types documented and approved.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Task dependencies mapped and assigned in correct sequence</div><div class="checklist-desc">Critical path identified. No blocking tasks assigned without prerequisites.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Time and effort estimations verified and approved by team leaders (includes 20% buffer)</div><div class="checklist-desc">Estimates include buffer time, documentation time, unit testing time.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Shared/common components identified and ownership assigned upfront</div><div class="checklist-desc">Common component directory created. Duplication prevented.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Impact analysis performed before every code change or CR</div><div class="checklist-desc">All affected modules identified. Stakeholders notified.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">All communications, decisions, and approvals confirmed in writing</div><div class="checklist-desc">Email trails maintained. No verbal-only agreements.</div></div></div>
+
+        <!-- Category 2: UI & Frontend -->
+        <div class="checklist-category">🎨 2. UI & Frontend</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Central design system applied across all modules</div><div class="checklist-desc">Fonts, colors, spacing, icons from one shared design system.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Action buttons have both icon and label</div><div class="checklist-desc">Export, Download, Submit, Delete, Save buttons pair relevant icon with label.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Actionable buttons disabled when action not valid</div><div class="checklist-desc">Submit, Save, Delete buttons disabled when no selection, page loading, or required fields empty.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Empty states handled everywhere with friendly message</div><div class="checklist-desc">Every list, table, dropdown displays "No Data Found" message. No blank screens.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Wrap/truncate rules defined and tested for long text fields</div><div class="checklist-desc">Truncation and wrapping rules defined upfront. Tested with long content.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Table columns have max-width with text-overflow ellipsis</div><div class="checklist-desc">All columns have max-width set. Truncated text shows ellipsis.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Tooltips on hover for all truncated text</div><div class="checklist-desc">Any truncated text shows full content on hover via tooltip.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">UI tested across browsers, screen sizes, and mobile devices</div><div class="checklist-desc">Cross-browser and responsive checks completed. All breakpoints tested.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Every async action shows loader, success, and error message</div><div class="checklist-desc">Loading indicator, success message on completion, error message on failure.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">All UI text reviewed for grammar and clarity</div><div class="checklist-desc">Labels, button text, messages, tooltips checked for grammar and spelling.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Success/error message strings standardized using central constants file</div><div class="checklist-desc">messages.js or constants file used across app. No hardcoded message strings.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Double-click and rapid submit prevented on all submit buttons</div><div class="checklist-desc">Button disabled on first click, loader shown. Prevents duplicate API calls.</div></div></div>
+
+        <!-- Category 3: API & Data -->
+        <div class="checklist-category">🔌 3. API & Data</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Mandatory vs optional API params confirmed with backend team</div><div class="checklist-desc">Verified which parameters are truly required. No blocking on optional params.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Primary key fields read-only in edit/update views</div><div class="checklist-desc">User ID, Record ID disabled or read-only in Edit/Update views.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Single unified API used for both web and mobile</div><div class="checklist-desc">No separate endpoints for web and mobile doing the same thing.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">UI updates automatically after every CRUD operation</div><div class="checklist-desc">After create, update, delete - UI reflects new state. No manual refresh.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Dependency checks performed before delete/update with warnings</div><div class="checklist-desc">Check if record referenced elsewhere. Show warning listing dependencies.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Search tested for both partial and full-match with 500+ records</div><div class="checklist-desc">Performance verified with datasets of 500+ records.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Dropdowns tested with 100+ and 500+ items with auto-populate</div><div class="checklist-desc">Edit/View pages correctly display pre-selected values with large datasets.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Null and undefined values handled gracefully</div><div class="checklist-desc">API responses with null/undefined show sensible defaults, not crashes.</div></div></div>
+
+        <!-- Category 4: Testing -->
+        <div class="checklist-category">🧪 4. Testing</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Unit test cases documented and marked passed for every module</div><div class="checklist-desc">Written test case list created. Each case marked passed before task done.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Edge cases tested (empty input, negative numbers, decimals, boundary values)</div><div class="checklist-desc">Test empty string, negative numbers, decimals, zero, very large numbers.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">All filter combinations tested, including no filter selected</div><div class="checklist-desc">Every possible combination of filters tested. Results valid.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Input validation covers both client-side and server-side</div><div class="checklist-desc">Never rely on client-side validation alone. Both sides validated.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Validation messages clear, specific, and actionable</div><div class="checklist-desc">No raw error codes. Tells user exactly what's wrong and how to fix.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Timezone handling tested and standardized to UTC across system</div><div class="checklist-desc">All dates stored in UTC. Conversion tested across timezones.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Build verification completed before QA handover</div><div class="checklist-desc">Unit testing, API testing, functional testing completed by developer.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Production-like data used in testing environments</div><div class="checklist-desc">Production-like data volume created before testing.</div></div></div>
+
+        <!-- Category 5: Security -->
+        <div class="checklist-category">🔒 5. Security</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Authentication tokens sent via secure headers, never in URL</div><div class="checklist-desc">Never expose tokens in URL. Always use headers.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">File uploads validated using MIME type and magic bytes</div><div class="checklist-desc">Never trust file extension. Validate actual MIME type.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Debug console logs removed and blocked before production</div><div class="checklist-desc">No sensitive data logged. ESLint rules prevent accidental logging.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Rate limiting implemented on all API endpoints</div><div class="checklist-desc">Frontend doesn't trigger excessive retries. Backend enforces limits.</div></div></div>
+
+        <!-- Category 6: Performance & Code Quality -->
+        <div class="checklist-category">⚡ 6. Performance & Code Quality</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Code follows agreed coding standards and naming conventions</div><div class="checklist-desc">Linting rules enforced. Naming consistent across all layers.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Query performance tested with large datasets (500+ records)</div><div class="checklist-desc">List and search features tested with 500+ records. Indexes added.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Audit logs maintained for all critical data changes</div><div class="checklist-desc">User, timestamp, and change details recorded for critical operations.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Concurrency control implemented for multi-user edits</div><div class="checklist-desc">Optimistic locking or version-based conflict detection in place.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">No N+1 queries or DB calls in loops</div><div class="checklist-desc">Query optimization applied. Batch loading where appropriate.</div></div></div>
+
+        <!-- Category 7: Pagination -->
+        <div class="checklist-category">📄 7. Pagination Best Practices</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Filters and search linked to pagination - page resets to 1 on filter change</div><div class="checklist-desc">When user applies filter or search, page number reset to 1 before API call.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Pagination state preserved on navigation (Back button)</div><div class="checklist-desc">Store pagination state in URL query parameters or session state.</div></div></div>
+
+        <!-- Category 8: Dropdowns -->
+        <div class="checklist-category">🔽 8. Dropdowns & Select Inputs</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Combo boxes implement server-side search for lists >50 items</div><div class="checklist-desc">Typed text sent to backend API as search parameter.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Child dropdowns cleared when parent changes</div><div class="checklist-desc">Parent onChange triggers child value reset AND option list reload.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Clear/unselect option provided for optional fields</div><div class="checklist-desc">Users not forced to select value if field not required.</div></div></div>
+
+        <!-- Category 9: Routing -->
+        <div class="checklist-category">🧭 9. Routing & Navigation Guards</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Every authenticated route protected with guard</div><div class="checklist-desc">Redirect to login if not authenticated. Check in router, not inside component.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Unsaved-changes guard implemented</div><div class="checklist-desc">Confirmation dialog if user modified form and attempts to navigate away.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">404 and catch-all routes handled explicitly</div><div class="checklist-desc">Friendly 404 page for any unmatched route.</div></div></div>
+
+        <!-- Category 10: Skeleton Screens -->
+        <div class="checklist-category">💀 10. Skeleton Screens & Loading States</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Skeleton screen shown within 100ms of data request starting</div><div class="checklist-desc">Skeleton mirrors real content layout. Appears immediately.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Shimmer animation used for inline content (not spinners)</div><div class="checklist-desc">Left-to-right shimmer animation for cards, tables, lists.</div></div></div>
+
+        <!-- Category 11: Debouncing -->
+        <div class="checklist-category">⏱️ 11. Input Debouncing & Throttling</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Debounce used for search and filter inputs (300-400ms)</div><div class="checklist-desc">Fire only after user stops typing. Reset timer on each keystroke.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Previous API request cancelled before sending new one (AbortController)</div><div class="checklist-desc">Prevents race conditions where stale response overrides fresh data.</div></div></div>
+
+        <!-- Category 12: Timezone -->
+        <div class="checklist-category">🌍 12. Timezone Handling</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">All dates stored in UTC (decision made at project start)</div><div class="checklist-desc">Storage standard agreed. Followed by entire team.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Frontend converts UTC to local time for display</div><div class="checklist-desc">User sees time in their own timezone, not UTC.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Frontend converts local time to UTC before POST/PUT requests</div><div class="checklist-desc">User-selected local time converted to UTC before sending.</div></div></div>
+
+        <!-- Category 13: Team & Process -->
+        <div class="checklist-category">👥 13. Team & Process</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Cross-team logic review conducted after every significant change</div><div class="checklist-desc">Review with web, mobile, backend teams after significant logic change.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Daily stand-up kept to maximum 15 minutes</div><div class="checklist-desc">Focus: what was done, what is planned, blockers only.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Duplicate work prevented by announcing new components in daily sync</div><div class="checklist-desc">Check shared/common folder before building any component.</div></div></div>
+
+        <!-- Category 14: Post-Development -->
+        <div class="checklist-category">📦 14. Post-Development & Change Management</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Every Change Request tracked and fully documented</div><div class="checklist-desc">What changed, why, who approved, impact documented.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Impact analysis performed and all affected modules re-tested after every fix/CR</div><div class="checklist-desc">Never assume change is isolated. Identify and re-test all affected modules.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">HLD and LLD documents updated to reflect actual implemented state</div><div class="checklist-desc">Design documents match actual system, not original plan.</div></div></div>
+
+        <!-- Category 15: Reusable Components -->
+        <div class="checklist-category">🧩 15. Reusable Components</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Shared components free of hardcoded context-specific styles</div><div class="checklist-desc">No fixed padding or heights. Expose className or style override props.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Reusable components tested with empty, loading, and error states</div><div class="checklist-desc">Components handle empty data, loading spinner, error fallback.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Unused/dead code reviewed and removed after feature changes</div><div class="checklist-desc">Code that is no longer called removed. No dead code accumulation.</div></div></div>
+
+        <!-- Category 16: State Management -->
+        <div class="checklist-category">📝 16. State & Form Management</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Forms and modals fully reset state on open and after submit</div><div class="checklist-desc">Unified handleClose function clears all form state. Cancel, Submit, Esc keys tested.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Table state (filters, pagination, search) preserved on navigation back</div><div class="checklist-desc">URL query parameters or session storage used. State restored on Back button.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">App handles null, undefined, and deleted data without crashing</div><div class="checklist-desc">Every component handles null, undefined, empty arrays gracefully.</div></div></div>
+
+        <!-- Category 17: Responsive Design -->
+        <div class="checklist-category">📱 17. Responsive Design & UI Consistency</div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Design system variables used in every component (no hardcoded values)</div><div class="checklist-desc">Colors, fonts, spacing from design system. No hardcoded values.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Text wrap, truncation, and tooltip rules defined globally</div><div class="checklist-desc">Table cells: truncate ellipsis + tooltip. Card titles: 2 lines max.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">All text labels, button labels, and messages standardized</div><div class="checklist-desc">Sentence case for labels/headings. Title case for buttons.</div></div></div>
+        <div class="checklist-item"><div class="checklist-checkbox"><input type="checkbox"></div><div class="checklist-content"><div class="checklist-title">Responsive testing completed on all breakpoints</div><div class="checklist-desc">Desktop, laptop, tablet, mobile tested.</div></div></div>
+    </div>
+
+    <!-- ==================== ETVX TEMPLATE ==================== -->
+    <div class="card" id="etvx-template">
+        <h2>22. 📋 ETVX Template (Entity - Transaction - Validation - eXception)</h2>
+        <div class="template-container">
+            <div class="template-title">ETVX Template</div>
+            <table class="etvx-table">
+                <thead><tr><th>Modules</th><th>Sub Modules</th><th>Fields</th><th>Entry</th><th>Tasks</th><th>Validation</th><th>Exit</th><th>API Spec</th></tr></thead>
+                <tbody>
+                    <tr><td>Login</td><td>Login Page</td><td>Email, Password</td><td>User navigates to login page</td><td>Enter credentials → Submit</td><td>Email & password required; Validate email format; Verify credentials</td><td>Logged in successfully</td><td>POST /api/login</td></tr>
+                    <tr><td>Registration</td><td>Enter Details</td><td>Company, Name, Email, Password</td><td>User navigates to registration</td><td>Fill form → Submit</td><td>All required fields; Password match; Email unique</td><td>Registration successful</td><td>POST /api/register</td></tr>
+                    <tr><td>Plan Management</td><td>Add Plan</td><td>Name, Service Type, Users, Features</td><td>Admin navigates to Add Plan</td><td>Enter details → Submit</td><td>Plan name unique; Numeric validation; Conditional fields</td><td>Plan created</td><td>POST /api/plans</td></tr>
+                </tbody>
+            </table>
+            <div class="template-url">📄 Download: ETVX_template.xlsx</div>
+        </div>
+    </div>
+
+    <!-- ==================== TEST CASES & TRACEABILITY MATRIX TEMPLATE ==================== -->
+    <div class="card" id="testcases-template">
+        <h2>23. 🧪 Test Cases & Traceability Matrix Template</h2>
+        <div class="template-container">
+            <div class="template-title">Test Cases Template</div>
+            <table class="data-table">
+                <thead><tr><th>ID</th><th>Test Case ID</th><th>Module</th><th>Test Steps</th><th>Expected Results</th><th>Status</th><th>Defect ID</th><th>Req ID</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>TC_LOGIN_001</td><td>Login</td><td>Enter valid email & password → Click Login</td><td>User redirected to dashboard</td><td>Pass</td><td>-</td><td>REQ-001</td></tr>
+                    <tr style="background:#fee2e2;"><td>2</td><td>TC_LOGIN_002</td><td>Login</td><td>Enter invalid password → Click Login</td><td>Error: "User not found"</td><td>Fail</td><td>BUG-101</td><td>REQ-001</td></tr>
+                </tbody>
+            </table>
+            <div class="template-title" style="margin-top:1rem;">Traceability Matrix Template</div>
+            <table class="data-table">
+                <thead><tr><th>Req ID</th><th>Requirement Description</th><th>Test Case IDs</th><th>Defect IDs</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>REQ-001</td><td>User Login with valid credentials</td><td>TC_LOGIN_001, TC_LOGIN_002</td><td>BUG-101</td><td>In Progress</td></tr>
+                    <tr><td>REQ-002</td><td>User Registration with email validation</td><td>TC_REG_001, TC_REG_002</td><td>-</td><td>Passed</td></tr>
+                </tbody>
+            </table>
+            <div class="template-url">📄 Download: TestCases_Template.xlsx | Traceability_Matrix_Template.xlsx</div>
+        </div>
+    </div>
+
+    <!-- ==================== API SPECIFICATION TEMPLATE ==================== -->
+    <div class="card" id="api-spec-template">
+        <h2>24. 🔌 API Specification Template</h2>
+        <div class="template-container">
+            <div class="template-title">API Specification Template</div>
+            <div class="code-block">
+POST /api/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+
+Response 200:
+{
+  "success": true,
+  "data": { "token": "jwt_token", "user": { "id": 1, "name": "User" } }
+}
+
+Response 401:
+{
+  "success": false,
+  "error": "Invalid credentials"
+}
+            </div>
+            <div class="template-url">📄 Download: API_Spec_Template.docx | openapi_template.yaml</div>
+        </div>
+    </div>
+
+    <!-- ==================== TEMPLATES REPOSITORY ==================== -->
+    <div class="card" id="templates-repo">
+        <h2>25. Templates Repository</h2>
+        <p><strong>Enterprise Template Repository:</strong> <code>/sdlc-templates</code></p>
+        <table class="data-table">
+            <thead><tr><th>Template</th><th>Download URL</th></tr></thead>
+            <tbody>
+                <tr><td>BRD Template</td><td><code>/BRD_template.docx</code></td></tr>
+                <tr><td>SRS Template</td><td><code>/SRS_template.docx</code></td></tr>
+                <tr><td>HLD Template</td><td><code>/HLD_template.docx</code></td></tr>
+                <tr><td>LLD Template</td><td><code>/LLD_template.docx</code></td></tr>
+                <tr><td><strong>ETVX Template</strong></td><td><a href="https://docs.google.com/spreadsheets/d/16YZSI5YBoBftmtMmkzF17k7isxmJ0lIl/edit?usp=drive_link&ouid=114190118600378224412&rtpof=true&sd=true">ETVX Template</a></td></tr>
+                <tr><td><strong>Test Cases and Traceability Matrix  Template</strong></td><td><a href="https://docs.google.com/spreadsheets/d/1UyscFlW-YaAneeSPzBN44-YXJ94dtS-i/edit?usp=drive_link&ouid=114190118600378224412&rtpof=true&sd=true">Test Cases and Traceability Matrix  Template</a></td></tr>
+				<tr><td><strong>API Specification Template</strong></td><td><a  href="https://docs.google.com/document/d/1LnRGSBPhV9tvZmYnp4kb7hi3WmUqLnqj/edit?usp=drive_link&ouid=114190118600378224412&rtpof=true&sd=true">API Specification Template</a></td></tr>
+                <tr><td>UAT Test Case Template</td><td><code>/UAT_template.docx</code></td></tr>
+                <tr><td>Deployment Checklist</td><td><code>deployment_checklist.docx</code></td></tr>
+                <tr><td>Incident RCA Template</td><td><code>/incident_RCA_template.docx</code></td></tr>
+                <tr><td>Change Request Form</td><td><code>/change_request_form.docx</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== DOCKER & KUBERNETES DEPLOYMENT BEST PRACTICES (APPENDED) ==================== -->
+    <div class="card" id="docker-k8s">
+        <h2>26. 🐳 Docker & Kubernetes Deployment Best Practices</h2>
+        
+        <h3>26.1 Docker Best Practices</h3>
+        <div class="template-container">
+            <div class="template-title">🐳 Dockerfile Best Practices</div>
+            <div class="code-block">
+# Multi-stage build for optimal image size
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine AS runner
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 appuser
+WORKDIR /app
+COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
+COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
+USER appuser
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node health-check.js || exit 1
+CMD ["node", "dist/main.js"]
+            </div>
+            <h4>Docker Best Practices Checklist:</h4>
+            <ul>
+                <li>✓ Use official base images (alpine variants for smaller size)</li>
+                <li>✓ Multi-stage builds to reduce final image size</li>
+                <li>✓ Run as non-root user (create appuser)</li>
+                <li>✓ Set HEALTHCHECK instruction for container orchestration</li>
+                <li>✓ Use .dockerignore to exclude unnecessary files</li>
+                <li>✓ Layer caching optimization (copy package.json before source)</li>
+                <li>✓ Label images with version, build date, and git commit</li>
+                <li>✓ Scan images for vulnerabilities (Trivy, Snyk)</li>
+                <li>✓ Never store secrets in images (use secrets management)</li>
+            </ul>
+        </div>
+
+        <h3>26.2 Kubernetes Deployment Best Practices</h3>
+        <div class="template-container">
+            <div class="template-title">☸ Kubernetes Production Manifest Template</div>
+            <div class="code-block code-block-yaml">
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  labels:
+    app: myapp
+    version: v1.0.0
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+    spec:
+      containers:
+      - name: app
+        image: myregistry/app:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: api-key
+      imagePullSecrets:
+      - name: regcred
+---
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: myapp
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: ClusterIP
+---
+# ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "10r/s"
+spec:
+  tls:
+  - hosts:
+    - api.example.com
+    secretName: tls-secret
+  rules:
+  - host: api.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-service
+            port:
+              number: 80
+            </div>
+            
+            <h4>Kubernetes Best Practices Checklist:</h4>
+            <ul>
+                <li>✓ Define resource requests and limits (never omit)</li>
+                <li>✓ Configure liveness and readiness probes</li>
+                <li>✓ Use RollingUpdate strategy with maxSurge and maxUnavailable</li>
+                <li>✓ Store secrets in Kubernetes Secrets or external vault</li>
+                <li>✓ Use ConfigMaps for non-sensitive configuration</li>
+                <li>✓ Implement Network Policies for zero-trust security</li>
+                <li>✓ Use PodDisruptionBudget for high availability</li>
+                <li>✓ Set node affinity/pod anti-affinity for resilience</li>
+                <li>✓ Use Horizontal Pod Autoscaler (HPA) based on CPU/memory</li>
+                <li>✓ Implement Service Mesh (Istio/Linkerd) for advanced observability</li>
+            </ul>
+        </div>
+
+        <h3>26.3 CI/CD Pipeline for Container Deployment</h3>
+        <div class="code-block">
+# GitHub Actions CI/CD Pipeline Example
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+      - name: Scan for vulnerabilities
+        run: trivy image --severity HIGH,CRITICAL myapp:${{ github.sha }}
+      - name: Push to registry
+        run: |
+          docker tag myapp:${{ github.sha }} myregistry/myapp:latest
+          docker push myregistry/myapp:${{ github.sha }}
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/app-deployment app=myregistry/myapp:${{ github.sha }}
+          kubectl rollout status deployment/app-deployment
+      - name: Smoke test
+        run: curl --fail https://api.example.com/health
+        </div>
+
+        <h3>26.4 Deployment Success Criteria</h3>
+        <div class="prohibited" style="background: #e8f5e9;">
+            <strong>✅ DEPLOYMENT SUCCESSFUL ONLY IF:</strong>
+            <ul>
+                <li>All pods running and healthy (kubectl get pods → all Running)</li>
+                <li>Liveness/Readiness probes passing</li>
+                <li>No crash loops or OOM kills</li>
+                <li>API endpoints responding within SLA</li>
+                <li>Monitoring dashboards showing metrics</li>
+                <li>Logs flowing to centralized system (ELK/Datadog)</li>
+                <li>Rollback tested and available</li>
+            </ul>
+        </div>
+        
+        <div class="template-url">📄 Deployment Checklist: deployment_checklist.docx | PRR_checklist.docx</div>
+    </div>
+
+
+    <div class="card" id="ai-guidelines">
+        <h2>27. 🤖 AI Services Guidelines & Checklist</h2>
+        <p><strong>Purpose:</strong> Ensure AI/ML services are developed, deployed, and governed with the same rigor as critical software, with additional considerations for model quality, bias, and prompt security.</p>
+
+
+     <!-- ==================== SECTION 1: MODEL TRAINING & DEVELOPMENT ==================== -->
+         <h3>27.1 Model Training & Development</h3>
+		 <div class="section-subtitle">Guidelines for building, training, and validating AI/ML models internally</div>
+		<div class="phase-card" id="phase1">
+
+			<div class="phase-content">
+				<div class="best-practices">
+					<div class="section-title">📚 Industry Best Practices</div>
+					<ul class="practice-list">
+						  <li><strong>Version Control:</strong> Use DVC, MLflow, or Git LFS for model and dataset versioning</li>
+						<li><strong>Dataset Provenance:</strong> Document data source, collection method, preprocessing, and version</li>
+						<li><strong>Data Quality:</strong> Validate data completeness, accuracy, and representativeness</li>
+						<li><strong>Reproducibility:</strong> Record all hyperparameters, training environment, and random seeds</li>
+						<li><strong>Bias Testing:</strong> Evaluate for demographic parity, equal opportunity, and disparate impact</li>
+						<li><strong>Explainability:</strong> Implement SHAP, LIME, or attention visualization for model decisions</li>
+						<li><strong>Performance Tracking:</strong> Monitor accuracy, precision, recall, F1, latency, throughput</li>
+						<li><strong>Model Card:</strong> Create comprehensive model documentation (Mojo and Huyen's framework)</li>
+						<li><strong>Cross-validation:</strong> Use k-fold cross-validation to prevent overfitting</li>
+						<li><strong>Test/Train Split:</strong> Maintain 70/20/10 split (Train/Validation/Test)</li>
+					</ul>
+				</div>
+				<div class="checklist-section">
+					<div class="section-title">✅ Phase Checklist</div>
+					<ul class="checklist-list">
+							<li class="checkbox-item"><input type="checkbox"> <span>Model versioning implemented (DVC/MLflow) <span class="mandatory-badge">MANDATORY</span></span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Training dataset documented with source, version, preprocessing <span class="mandatory-badge">MANDATORY</span></span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Data quality assessment completed (completeness, accuracy, representativeness)</span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Hyperparameters documented with justification</span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Training environment (hardware, OS, dependencies) documented</span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Bias validation completed (demographic parity, equal opportunity) <span class="mandatory-badge">MANDATORY</span></span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Explainability/interpretability implemented <span class="compliance-badge">GDPR</span></span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Model Card created and reviewed <span class="mandatory-badge">MANDATORY</span></span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Cross-validation completed (k-fold or stratified)</span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Test set performance validated against acceptance criteria</span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Model performance drift monitoring defined</span></li>
+						<li class="checkbox-item"><input type="checkbox"> <span>Data retention and privacy compliance verified (GDPR, CCPA)</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+        <!-- Additional Guidelines -->
+        <div style="padding: 0 1.5rem 1.5rem 1.5rem;">
+            <div style="background: #ede9fe; border-radius: 0.75rem; padding: 1rem; border: 1px solid #c4b5fd;">
+                <h4 style="color: #4a1a6b; margin-bottom: 0.5rem;">📋 Model Card Requirements (Mandatory)</h4>
+                <ul style="list-style: none; padding-left: 0; font-size: 0.85rem;">
+                    <li>• <strong>Model Details:</strong> Name, version, architecture, training date, authors</li>
+                    <li>• <strong>Intended Use:</strong> Primary use case, intended users, out-of-scope uses</li>
+                    <li>• <strong>Training Data:</strong> Source, size, preprocessing, limitations</li>
+                    <li>• <strong>Evaluation Data:</strong> Test set description, evaluation methodology</li>
+                    <li>• <strong>Performance Metrics:</strong> Accuracy, precision, recall, F1, latency, throughput</li>
+                    <li>• <strong>Limitations:</strong> Known limitations, edge cases, failure modes</li>
+                    <li>• <strong>Bias Analysis:</strong> Group fairness metrics, known biases, mitigation strategies</li>
+                    <li>• <strong>Ethical Considerations:</strong> Impact assessment, deployment constraints</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ CRITICAL:</strong> Models with bias scores exceeding acceptable thresholds (Δ < 0.1) MUST NOT be deployed to production. Bias mitigation techniques must be applied before deployment.
+            </div>
+        </div>
+		
+	    <!-- ==================== SECTION 2: MODEL SUBSCRIPTION & USE ==================== -->	
+		
+         <h3>27.2 Model Subscription & Use</h3>
+		 <div class="section-subtitle">Guidelines for procuring, integrating, and using third-party AI/ML services</div>		
+		    <div class="phase-card" id="phase1">
+ 
+        <div class="phase-content">
+            <div class="best-practices">
+                <div class="section-title">📚 Industry Best Practices</div>
+                <ul class="practice-list">
+                      <li><strong>Vendor Assessment:</strong> Evaluate model provider's compliance, security, and privacy policies</li>
+                    <li><strong>API Key Management:</strong> Store API keys in Vault/AWS Secrets Manager - NEVER in code</li>
+                    <li><strong>Rate Limiting:</strong> Implement RPM (Requests Per Minute) and TPM (Tokens Per Minute) limits</li>
+                    <li><strong>Prompt Versioning:</strong> Store all prompts in version control with review history</li>
+                    <li><strong>Prompt Injection Protection:</strong> Sanitize inputs, escape delimiters, separate instructions</li>
+                    <li><strong>Content Filtering:</strong> Implement profanity filters, PII detection, harmful content blocking</li>
+                    <li><strong>Response Logging:</strong> Log all AI responses with user ID, timestamp, prompt, model version</li>
+                    <li><strong>Cost Monitoring:</strong> Track token usage and cost per user/feature</li>
+                    <li><strong>Fallback Strategy:</strong> Define graceful degradation when model unavailable or confidence low</li>
+                    <li><strong>Human-in-the-Loop:</strong> Critical decisions require human approval and override capability</li>
+                </ul>
+            </div>
+            <div class="checklist-section">
+                <div class="section-title">✅ Phase Checklist</div>
+                <ul class="checklist-list">
+                      <li class="checkbox-item"><input type="checkbox"> <span>Vendor security assessment completed <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>API keys stored in Vault/Secrets Manager (not in code) <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Rate limiting configured (RPM, TPM) <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Prompt versioning implemented <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Prompt injection protection implemented <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Content filtering and moderation active</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>All AI responses logged with request context <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Cost tracking and budget alerts configured</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Fallback mechanism defined for model failure</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Human approval workflow for critical decisions <span class="mandatory-badge">MANDATORY</span></span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Data privacy and processing agreements in place</span></li>
+                    <li class="checkbox-item"><input type="checkbox"> <span>Model output validation pipeline defined</span></li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+	    <!-- Additional Guidelines -->
+        <div style="padding: 0 1.5rem 1.5rem 1.5rem;">
+            <div style="background: #e0f2fe; border-radius: 0.75rem; padding: 1rem; border: 1px solid #7dd3fc;">
+                <h4 style="color: #1b5a7a; margin-bottom: 0.5rem;">🔐 Security & Privacy Requirements</h4>
+                <ul style="list-style: none; padding-left: 0; font-size: 0.85rem;">
+                    <li>• <strong>Data Privacy:</strong> Do NOT send PII, PHI, or sensitive data to external AI APIs without explicit approval</li>
+                    <li>• <strong>Data Retention:</strong> Logs containing prompts must be retained for minimum 30 days, maximum 90 days</li>
+                    <li>• <strong>Anonymization:</strong> User identifiers in prompts must be anonymized before logging</li>
+                    <li>• <strong>Model Evaluation:</strong> Test model outputs on a sample dataset before full deployment</li>
+                    <li>• <strong>Guardrails:</strong> Define output validation rules (length limits, banned patterns, format validation)</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ CRITICAL:</strong> Any use of external AI services requires prior approval from the Security & Privacy Committee. Vendors must be reviewed for compliance with GDPR, EU AI Act, and organizational data protection policies.
+            </div>
+        </div>	
+		
+		
+    </div>
+
+   
+    <!-- Footer -->
+    <div class="card" style="text-align: center; background: var(--gray-900); color: white;">
+        <p>© 2026 Enterprise SDLC Governance Framework v1.1 | 🔴 CRITICAL PRODUCT DEVELOPMENT</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">All releases must be traceable. All production changes must be auditable.</p>
+        <p style="font-size: 0.7rem; margin-top: 0.5rem;">Template Repository: https://github.com//sdlc-templates</p>
+    </div>
+</div>
+
+<script>
+    // Save checkbox states to localStorage
+    document.querySelectorAll('.checklist-checkbox input').forEach((checkbox, index) => {
+        const saved = localStorage.getItem(`sdlc_checklist_v33_${index}`);
+        if (saved === 'true') checkbox.checked = true;
+        checkbox.addEventListener('change', () => {
+            localStorage.setItem(`sdlc_checklist_v33_${index}`, checkbox.checked);
+        });
+    });
+</script>
+</body>
+</html>
